@@ -24,6 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	var openableApps: OpenableApps!
 	var appTracker: AppTracker!
 	var runningApps: RunningApps!
+    var regularAppsHide: RegularAppsHide!
 	var regularApps: RegularApps!
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
@@ -48,8 +49,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 		runningApps = RunningApps(userPrefsDataSource: userPrefs)
 		regularApps = RegularApps(userPrefsDataSource: userPrefs)
+        regularAppsHide = RegularAppsHide(userPrefsDataSource: userPrefs)
 
-		openableApps = OpenableApps(userPrefsDataSource: userPrefs, runningApps: runningApps, regularApps: regularApps)
+        openableApps = OpenableApps(userPrefsDataSource: userPrefs, runningApps: runningApps,
+                                    regularApps: regularApps, runningAppsHide: regularAppsHide)
 
 		updateMenuBarItems()
 	}
@@ -118,7 +121,7 @@ extension AppDelegate: AppTrackerDelegate {
 	private func appActivationChange() {
 		runningApps.update()
 		//		regularApps.update() //doesn't make sense to update regular apps based on app activations. we could if we wanted to due to the hot reactive code structure, but best not to.
-		openableApps.update(runningApps: runningApps, regularApps: regularApps)
+        openableApps.update(runningApps: runningApps, regularApps: regularApps, runningAppsHide: regularAppsHide)
 
 		updateMenuBarItems()
 	}
@@ -205,6 +208,26 @@ extension AppDelegate: PreferencesViewControllerDelegate {
 		userPrefsWasUpdated()
 	}
 
+    func regularAppsHideUrlsWereAdded(_ value: [URL]) {
+        value.forEach { (url) in
+            if !userPrefs.regularAppsHideUrls.contains(url) {
+                userPrefs.regularAppsHideUrls.append(url)
+            }
+        }
+        userPrefsWasUpdated()
+    }
+
+    func regularAppsHideUrlsWereRemoved(_ removedIndexes: IndexSet) {
+        userPrefs.regularAppsHideUrls.remove(at: removedIndexes)
+        userPrefsWasUpdated()
+    }
+
+    func regularAppHideUrlWasMoved(oldIndex: Int, newIndex: Int) {
+        let url = userPrefs.regularAppsHideUrls.remove(at: oldIndex)
+        userPrefs.regularAppsHideUrls.insert(url, at: newIndex)
+        userPrefsWasUpdated()
+    }
+
 	func sideToShowRunningAppsDidChange(_ value: SideToShowRunningApps) {
 		userPrefs.sideToShowRunningApps = value
 		userPrefsWasUpdated()
@@ -231,7 +254,8 @@ extension AppDelegate: PreferencesViewControllerDelegate {
 		userPrefs.save()
 		runningApps.update()
 		regularApps.update()
-		openableApps.update(runningApps: runningApps, regularApps: regularApps)
+        regularAppsHide.update()
+		openableApps.update(runningApps: runningApps, regularApps: regularApps, runningAppsHide: regularAppsHide)
 		updateMenuBarItems()
 	}
 }

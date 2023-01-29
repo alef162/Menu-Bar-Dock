@@ -37,6 +37,7 @@
 		38E394F9222D7B61006F926E /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 38E394F8222D7B61006F926E /* ServiceManagement.framework */; };
 		38EEA8BF26238C14005DD6A1 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EEA8BE26238C14005DD6A1 /* Utils.swift */; };
 		8025B2CADE468941B1A841B9 /* Pods_Launcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98BF29A3FBD4222A2994CC63 /* Pods_Launcher.framework */; };
+		882A121A2986BC3C00D86A6B /* RegularAppsHide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 882A12192986BC3C00D86A6B /* RegularAppsHide.swift */; };
 		88AD155137A7D16EF21440CF /* Pods_Menu_Bar_DockUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9B9AC2CA0427E3D1161227B /* Pods_Menu_Bar_DockUITests.framework */; };
 		B7AFA862BC6214A4D95098CC /* Pods_Menu_Bar_DockTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 30D61877253F489B8F948C27 /* Pods_Menu_Bar_DockTests.framework */; };
 /* End PBXBuildFile section */
@@ -122,6 +123,7 @@
 		489942CC5F97C7BABFC066E7 /* Pods-Menu Bar Dock.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Menu Bar Dock.debug.xcconfig"; path = "Target Support Files/Pods-Menu Bar Dock/Pods-Menu Bar Dock.debug.xcconfig"; sourceTree = "<group>"; };
 		4E25AD7108669ADAF8C59B09 /* Pods_Menu_Bar_Dock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Menu_Bar_Dock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6EECCBA0CAA1B9E8A1451213 /* Pods-Menu Bar DockTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Menu Bar DockTests.debug.xcconfig"; path = "Target Support Files/Pods-Menu Bar DockTests/Pods-Menu Bar DockTests.debug.xcconfig"; sourceTree = "<group>"; };
+		882A12192986BC3C00D86A6B /* RegularAppsHide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegularAppsHide.swift; sourceTree = "<group>"; };
 		98BF29A3FBD4222A2994CC63 /* Pods_Launcher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Launcher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9B9AC2CA0427E3D1161227B /* Pods_Menu_Bar_DockUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Menu_Bar_DockUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAB0347B15BF571A9C8E5CEA /* Pods-Menu Bar DockUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Menu Bar DockUITests.debug.xcconfig"; path = "Target Support Files/Pods-Menu Bar DockUITests/Pods-Menu Bar DockUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				384318F72624A36A00A6B6A0 /* RunningApps.swift */,
 				3843191A2626487E00A6B6A0 /* RegularApp.swift */,
 				384319012624BAB800A6B6A0 /* RegularApps.swift */,
+				882A12192986BC3C00D86A6B /* RegularAppsHide.swift */,
 				384319572628BD7800A6B6A0 /* AppTracker.swift */,
 			);
 			path = MenuBarDock;
@@ -582,6 +585,7 @@
 				384318F82624A36A00A6B6A0 /* RunningApps.swift in Sources */,
 				38412F02222B3E2F00D3FA0C /* PreferencesViewController.swift in Sources */,
 				384CBEBF262276A9000B08FC /* OpenableApps.swift in Sources */,
+				882A121A2986BC3C00D86A6B /* RegularAppsHide.swift in Sources */,
 				38412F00222B3E2F00D3FA0C /* AppDelegate.swift in Sources */,
 				384319632628EC8700A6B6A0 /* AboutViewController.swift in Sources */,
 				384CBEA526226333000B08FC /* MenuBarItems.swift in Sources */,
@@ -777,11 +781,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MenuBarDock/MenuBarDock.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MenuBarDock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -805,11 +810,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MenuBarDock/MenuBarDock.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 23;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = MenuBarDock/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -832,9 +838,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MenuBarDockTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -856,9 +863,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MenuBarDockTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -879,9 +887,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MenuBarDockUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -902,9 +911,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MenuBarDockUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -926,9 +936,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Launcher/Launcher.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Launcher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -950,9 +961,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Launcher/Launcher.entitlements;
 				CODE_SIGN_IDENTITY = "Mac Developer";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = T34G959ZG8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Launcher/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

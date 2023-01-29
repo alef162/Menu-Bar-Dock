@@ -10,10 +10,16 @@ import Cocoa
 
 extension PreferencesViewController: NSTableViewDataSource {
 	func numberOfRows(in tableView: NSTableView) -> Int {
-		userPrefsDataSource.regularAppsUrls.count
+        if tableView == appsTable {
+            return userPrefsDataSource.regularAppsUrls.count
+        } else if tableView == appsTableHide {
+            return userPrefsDataSource.regularAppsHideUrls.count
+        }
+        return 0
 	}
 
 }
+
 extension PreferencesViewController: NSTableViewDelegate {
 	func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
 		return 30
@@ -21,8 +27,14 @@ extension PreferencesViewController: NSTableViewDelegate {
 
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
 		var cellIdentifier: String = ""
+        var url: URL!
 
-		let url = userPrefsDataSource.regularAppsUrls[row]
+        if tableView == appsTable {
+            url = userPrefsDataSource.regularAppsUrls[row]
+        } else if tableView == appsTableHide {
+            url = userPrefsDataSource.regularAppsHideUrls[row]
+        }
+
 		let bundle = Bundle(url: url)
 
 		let icon = NSWorkspace.shared.icon(forFile: url.path)

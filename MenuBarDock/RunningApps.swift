@@ -14,6 +14,8 @@ protocol RunningAppsUserPrefsDataSource: AnyObject {
 	var maxNumRunningApps: Int { get }
 	var runningAppsSortingMethod: RunningAppsSortingMethod { get }
 	var regularAppsUrls: [URL] { get }
+    var regularAppsHideUrls: [URL] { get }
+
 }
 
 class RunningApps {

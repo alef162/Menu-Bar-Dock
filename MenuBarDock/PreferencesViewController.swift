@@ -25,6 +25,9 @@ protocol PreferencesViewControllerDelegate: AnyObject {
 	func regularAppsUrlsWereAdded(_ value: [URL])
 	func regularAppsUrlsWereRemoved(_ removedIndexes: IndexSet)
 	func regularAppUrlWasMoved(oldIndex: Int, newIndex: Int)
+    func regularAppsHideUrlsWereAdded(_ value: [URL])
+    func regularAppsHideUrlsWereRemoved(_ removedIndexes: IndexSet)
+    func regularAppHideUrlWasMoved(oldIndex: Int, newIndex: Int)
 	func sideToShowRunningAppsDidChange(_ value: SideToShowRunningApps)
 	func hideDuplicateAppsWasPressed(_ value: Bool)
 	func duplicateAppsPriorityDidChange(_ value: DuplicateAppsPriority)
@@ -41,6 +44,7 @@ protocol PreferencesViewControllerUserPrefsDataSource: AnyObject {
 	var hideFinderFromRunningApps: Bool { get }
 	var hideActiveAppFromRunningApps: Bool { get }
 	var regularAppsUrls: [URL] { get }
+    var regularAppsHideUrls: [URL] { get }
 	var sideToShowRunningApps: SideToShowRunningApps { get }
 	var hideDuplicateApps: Bool { get }
 	var duplicateAppsPriority: DuplicateAppsPriority { get }
@@ -76,7 +80,11 @@ class PreferencesViewController: NSViewController { // this should do onthing
 	@IBOutlet weak var launchAtLoginButton: NSButton!
 
 	@IBOutlet weak var appsTable: NSTableView!
+    @IBOutlet weak var appsTableHide: NSTableView!
+    // var appsTableViewDataSource: PreferencesHideViewController
+
 	@IBOutlet weak var regularAppsHintLabel: NSTextField!
+    @IBOutlet weak var regularAppsHideHintLabel: NSTextField!
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -84,7 +92,14 @@ class PreferencesViewController: NSViewController { // this should do onthing
 		appsTable.dataSource = self
 		appsTable.doubleAction = #selector(tableRowDoubleClicked)
 		appsTable.registerForDraggedTypes([.string])
+
+        appsTableHide.delegate = self
+        appsTableHide.dataSource = self
+        appsTableHide.doubleAction = #selector(tableRowDoubleClicked)
+        appsTableHide.registerForDraggedTypes([.string])
+
 		updateTable()
+        updateTableHide()
 
 	}
 	override func viewWillAppear() {
@@ -146,7 +161,14 @@ class PreferencesViewController: NSViewController { // this should do onthing
 		} else {
 			regularAppsHintLabel.stringValue = "Click + to add some apps!"
 		}
-	}
+
+        if userPrefsDataSource.regularAppsHideUrls.count > 0 {
+            regularAppsHideHintLabel.stringValue = "Drag apps to reorder them!"
+        } else {
+            regularAppsHideHintLabel.stringValue = "Click + to add some apps!"
+        }
+
+    }
 
 	private func initAppOpeningMethodPopup() {
 		appOpeningMethodPopUp.removeAllItems()
@@ -254,6 +276,17 @@ class PreferencesViewController: NSViewController { // this should do onthing
 		}
 	}
 
+    @IBAction func addOrRemovePressedHide(_ sender: NSSegmentedControl) {
+        switch sender.selectedSegment {
+        case 0:
+            showFileExplorerToAddAppsHide()
+        case 1:
+            removeSelectedAppsHide()
+        default:
+            break
+        }
+    }
+
 	@IBAction func showRunningAppsOnLeftOrRightSelected(_ sender: NSSegmentedControl) {
 		switch sender.selectedSegment {
 		case 0:
@@ -329,19 +362,55 @@ class PreferencesViewController: NSViewController { // this should do onthing
 		}
 	}
 
+    private func showFileExplorerToAddAppsHide() {
+        let dialog = NSOpenPanel()
+
+        dialog.title = "Select some apps"
+        dialog.showsResizeIndicator = true
+        dialog.directoryURL = URL(fileURLWithPath: "/Applications", isDirectory: true)
+        dialog.showsHiddenFiles = false
+        dialog.allowsMultipleSelection = true
+        dialog.canChooseDirectories = false
+        dialog.canChooseFiles = true
+        dialog.allowedFileTypes = ["app"]
+
+        if dialog.runModal() == NSApplication.ModalResponse.OK {
+            delegate?.regularAppsHideUrlsWereAdded(dialog.urls)
+            updateTableHide()
+            updateUi()
+        } else {
+            // User clicked on "Cancel"
+            return
+        }
+    }
+
 	private func removeSelectedApps() {
 		delegate?.regularAppsUrlsWereRemoved(appsTable.selectedRowIndexes)
 		updateTable()
 		updateUi()
 	}
 
-	private func updateTable() {
+    private func removeSelectedAppsHide() {
+        delegate?.regularAppsHideUrlsWereRemoved(appsTableHide.selectedRowIndexes)
+        updateTableHide()
+        updateUi()
+    }
+
+    private func updateTable() {
 		appsTable.reloadData()
 	}
+
+    private func updateTableHide() {
+        appsTableHide.reloadData()
+    }
 
 	@objc private func tableRowDoubleClicked() {
 		NSWorkspace.shared.activateFileViewerSelecting([userPrefsDataSource.regularAppsUrls[appsTable.clickedRow]]) // reveal in finder
 	}
+
+    @objc private func tableHideRowDoubleClicked() {
+        NSWorkspace.shared.activateFileViewerSelecting([userPrefsDataSource.regularAppsHideUrls[appsTableHide.clickedRow]]) // reveal in finder
+    }
 
 	private func showResetConfirmationAlert(title: String, message: String, completion: (Bool) -> Void) {
 		let alert = NSAlert()

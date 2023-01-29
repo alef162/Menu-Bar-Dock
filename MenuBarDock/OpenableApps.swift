@@ -24,24 +24,28 @@ class OpenableApps {
 	public weak var userPrefsDataSource: OpenableAppsUserPrefsDataSource!
 
  	private var runningApps: RunningApps
+    private var runningAppsHide: RegularAppsHide
 	private var regularApps: RegularApps
 
 	init(
 		userPrefsDataSource: OpenableAppsUserPrefsDataSource,
 		runningApps: RunningApps,
-		regularApps: RegularApps
+		regularApps: RegularApps,
+        runningAppsHide: RegularAppsHide
  	) {
  		self.userPrefsDataSource = userPrefsDataSource
 		self.runningApps = runningApps
+        self.runningAppsHide = runningAppsHide
 		self.regularApps = regularApps
 
 		populateApps()
 	}
 
-	func update(runningApps: RunningApps, regularApps: RegularApps) {
+    func update(runningApps: RunningApps, regularApps: RegularApps, runningAppsHide: RegularAppsHide ) {
 		self.runningApps = runningApps
 		self.regularApps = regularApps
-		populateApps()
+        self.runningAppsHide = runningAppsHide
+        populateApps()
 	}
 
 	private func populateApps() {
@@ -65,6 +69,10 @@ class OpenableApps {
 				userPrefsDataSource.duplicateAppsPriority == .regularApps &&
 				regularApps.apps.contains(where: {$0.id == runningApp.id})
 			) { continue }
+
+            if (
+                runningAppsHide.apps.contains(where: {$0.id == runningApp.id})
+            ) { continue }
 
 			guard let openableApp = try? OpenableApp(
 				runningApp: runningApp,
